@@ -38,7 +38,11 @@ public class pegaJson {
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder().uri(endereco).build();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            return new Gson().fromJson(response.body(), Cep.class);
+            Cep cep = new Gson().fromJson(response.body(), Cep.class);
+            if (cep.getCep().isEmpty()){
+                throw new RuntimeException("Endereço não encontrado");
+            }
+            return cep;
         } catch (Exception e) {
             throw new RuntimeException("Erro linha 42");
         }
